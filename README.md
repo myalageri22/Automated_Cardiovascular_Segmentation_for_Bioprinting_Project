@@ -17,7 +17,7 @@ This repo combines:
 
 ## Repository Layout:
 
-text
+```text
 .
 ├── run_full_pipeline.py          # Phase A inference -> Phase B pipeline
 ├── run_phaseb.py                 # Convenience wrapper for Phase B CLI
@@ -32,23 +32,23 @@ text
 │   ├── src/phaseb/               # Phase B package
 │   └── tests/
 └── phaseb_outputs/               # Example generated outputs
-
+```
 
 ## Environment Setup:
 
-bash
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 pip install -r requirements_phaseb.txt
-
+```
 
 ## Quick Start:
 
 ### 1) Run Phase B only (from CT + segmentation):
 
-bash
+```bash
 python run_phaseb.py \
   --ct /path/to/ct.nii.gz \
   --seg /path/to/seg_prob_or_mask.nii.gz \
@@ -56,11 +56,11 @@ python run_phaseb.py \
   --case-id demo \
   --outdir ./phaseb_outputs \
   --threshold-sweep
-
+```
 
 ### 2) Run full pipeline (Phase A inference -> Phase B):
 
-bash
+```bash
 python run_full_pipeline.py \
   --ct /path/to/ct.nii.gz \
   --checkpoint checkpoints/checkpoint_best.pt \
@@ -68,13 +68,13 @@ python run_full_pipeline.py \
   --case-id demo \
   --phaseb-threshold-sweep \
   --phaseb-previews
-
+```
 
 ## Training (Phase A):
 
 Example:
 
-bash
+```bash
 python "train_vascular.py" \
   --dataset_preset imagecas \
   --imagecas_root /path/to/data \
@@ -82,7 +82,7 @@ python "train_vascular.py" \
   --batch_size 1 \
   --roi_size 96,192,192 \
   --experiment_name bioprint_v1
-
+```
 
 Useful sanity modes:
 - `--dry_run`: validates forward/backward pass and validation inference
@@ -99,7 +99,7 @@ Useful sanity modes:
 
 ### Typical output structure:
 
-text
+```text
 pipeline_outputs/<case_id>/
 ├── phasea/
 │   ├── ct_preprocessed.nii.gz
@@ -111,13 +111,13 @@ pipeline_outputs/<case_id>/
 ├── qc_summary.txt
 ├── qc_summary.csv
 └── used_config.yaml
-
+```
 
 ## Testing:
 
-bash
+```bash
 pytest phaseb/tests
-
+```
 
 ## Utility Scripts:
 
