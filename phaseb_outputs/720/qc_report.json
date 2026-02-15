@@ -1,0 +1,138 @@
+{
+  "case_id": "720",
+  "timestamp": "2026-01-03T22:18:40.206235Z",
+  "input_paths": {
+    "ct": "/Users/prade/U-NET-ISEF/cloud_bundle/data/processed/all/601-800/720.img.nii.gz",
+    "seg": "/Users/prade/U-NET-ISEF/cloud_bundle/data/processed/all/601-800/720.label.nii.gz"
+  },
+  "segmentation": {
+    "type": "mask",
+    "threshold": 0.4
+  },
+  "ct_metadata": {
+    "spacing": [
+      0.35546875,
+      0.35546875,
+      0.5
+    ],
+    "origin": [
+      -52.822265625,
+      -71.677734375,
+      -251.5500030517578
+    ],
+    "direction": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "mask_metrics": {
+    "component_count": 1,
+    "volume_mm3": 7119.580146789551,
+    "largest_component_mm3": 7119.580146789551,
+    "largest_component_ratio": 1.0,
+    "voxel_count": 112689,
+    "spacing": [
+      0.35546875,
+      0.35546875,
+      0.5
+    ]
+  },
+  "topology_metrics": {
+    "component_count_after_cleanup": 1,
+    "skeleton_endpoints": 492
+  },
+  "mesh_raw": {
+    "surface_area_mm2": 7854.843651583463,
+    "volume_mm3": -7071.361395200093,
+    "bounding_box_mm": [
+      [
+        -22.4296875,
+        -226.484375,
+        -242.3000030517578
+      ],
+      [
+        73.19140625,
+        -134.41796875,
+        -133.8000030517578
+      ]
+    ],
+    "component_count": 1,
+    "is_watertight": true,
+    "euler_number": -8
+  },
+  "mesh_repaired": {
+    "surface_area_mm2": 7854.84365158346,
+    "volume_mm3": 7071.361395200093,
+    "bounding_box_mm": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        95.62109375,
+        92.06640625,
+        108.5
+      ]
+    ],
+    "component_count": 1,
+    "is_watertight": true,
+    "euler_number": -8
+  },
+  "printability": {
+    "min_radius_mm": 0.35546875,
+    "p5_radius_mm": 0.35546875,
+    "p50_radius_mm": 0.7090247276739543,
+    "percent_below_threshold": 39.93734969695356
+  },
+  "robustness": null,
+  "threshold_sweep": null,
+  "used_config": {
+    "segmentation": {
+      "seg_type": "auto",
+      "default_threshold": 0.4,
+      "threshold_candidates": [
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8
+      ],
+      "min_probability": 0.0,
+      "selected_threshold": 0.4
+    },
+    "resample": {
+      "target_spacing_mm": null
+    },
+    "postprocess": {
+      "fill_holes": true,
+      "closing_mm": 1.0,
+      "min_component_mm3": 50.0,
+      "keep_mode": "largest"
+    },
+    "mesh": {
+      "marching_cubes_step": 1
+    },
+    "repair": {
+      "use_pymeshfix": true
+    },
+    "qc": {
+      "min_radius_mm": 0.6
+    },
+    "previews": {
+      "enable": false
+    },
+    "logging": {
+      "level": "INFO"
+    }
+  }
+}

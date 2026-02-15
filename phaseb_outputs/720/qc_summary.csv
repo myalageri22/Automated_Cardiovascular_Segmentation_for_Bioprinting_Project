@@ -1,0 +1,2 @@
+case_id,threshold,volume_mm3,component_count,mesh_surface_area_mm2,mesh_watertight,min_radius_mm,percent_below_radius,pass
+720,0.4,7119.580146789551,1,7854.84365158346,True,0.35546875,39.93734969695356,False

@@ -1,0 +1,9 @@
+Case: 720
+Seg type: mask threshold=0.4
+Mask volume (mm^3): 7119.58
+Components after cleanup: 1
+Mesh surface area (mm^2): 7854.84365158346
+Mesh watertight: True
+Radii (min/p5/p50 mm): 0.35546875 / 0.35546875 / 0.7090247276739543
+Pass: False
+Reasons: large fraction below min radius

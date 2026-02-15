@@ -1,0 +1,10 @@
+2026-01-03 15:59:01,856 [INFO] Starting Phase B for case 720
+2026-01-03 15:59:02,506 [INFO] Segmentation type: mask
+2026-01-03 15:59:02,563 [WARNING] Threshold sweep requested but segmentation is not probability map; skipping sweep
+2026-01-03 16:15:53,559 [INFO] Starting Phase B for case 720
+2026-01-03 16:15:54,199 [INFO] Segmentation type: mask
+2026-01-03 16:15:54,261 [WARNING] Threshold sweep requested but segmentation is not probability map; skipping sweep
+2026-01-03 16:18:23,964 [INFO] Starting Phase B for case 720
+2026-01-03 16:18:24,632 [INFO] Segmentation type: mask
+2026-01-03 16:18:24,681 [WARNING] Threshold sweep requested but segmentation is not probability map; skipping sweep
+2026-01-03 16:18:40,207 [INFO] Completed Phase B for 720
