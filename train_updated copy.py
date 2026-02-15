@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
 ImageCAS 3D Vascular Segmentation Training Pipeline
-=====================================================
-Self-contained, production-ready training script for cardiac CT angiography
-vessel segmentation optimized for bioprinting applications (high recall of thin branches).
 
 Features:
 - Patch-based training with RandCropByPosNegLabeld
@@ -16,8 +13,6 @@ Features:
 - Comprehensive logging and probability diagnostics
 - Training history tracking and plotting
 
-Example Commands:
------------------
 # Train from scratch:
 python "train_vascular.py" \
   --dataset_preset imagecas \
@@ -33,33 +28,6 @@ python "train_vascular.py" \
   --min_pos_voxels 500 \
   --save_val_preds \
   --experiment_name "bioprint_v1"
-
-# Plot training history:
-python train_vascular.py --plot_history /path/to/training_history.json
-
-# Resume from latest checkpoint:
-python "train_vascular.py" \
-  --resume latest \
-  --checkpoint_dir /path/to/checkpoints \
-  --experiment_name "bioprint_v1_resume"
-
-# Resume from specific epoch (PyTorch 2.6+ safe):
-python "train_vascular.py" \
-  --resume /workspace/datasets/imagecas_v3/Cloud_bundle1111/checkpoints/checkpoint_epoch_12.pt \
-  --experiment_name "bioprint_v1_resume"
-
-# Overfit single case (sanity test):
-python "train_vascular.py" \
-  --dataset_preset imagecas \
-  --imagecas_root /path/to/data \
-  --overfit_one \
-  --epochs 50
-
-# Dry run (shape/dtype checks):
-python "train_vascular.py" \
-  --dataset_preset imagecas \
-  --imagecas_root /path/to/data \
-  --dry_run
 """
 
 import argparse
@@ -114,17 +82,13 @@ except ImportError:
     print("pandas not installed: pip install pandas openpyxl")
     sys.exit(1)
 
-# Suppress deprecation warnings that are not critical
 warnings.filterwarnings("ignore", category=UserWarning, message=".*epoch parameter.*")
 warnings.filterwarnings("ignore", category=FutureWarning, message=".*min_size.*")
 warnings.filterwarnings("ignore", category=FutureWarning, message=".*always_return_as_numpy.*")
 
-# ============================================================================
-# PLOTTING FUNCTION
-# ============================================================================
+# Plotting Function
 
 def plot_training_history(history_path: Path, output_path: Optional[Path] = None, logger: Optional[logging.Logger] = None):
-    """Plot training history from JSON file."""
     try:
         import matplotlib.pyplot as plt
     except ImportError:
@@ -138,7 +102,6 @@ def plot_training_history(history_path: Path, output_path: Optional[Path] = None
     with open(history_path, 'r') as f:
         history = json.load(f)
     
-    # Create figure with subplots
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
     fig.suptitle(f"Training History: {history_path.stem}", fontsize=14, fontweight='bold')
     
@@ -167,7 +130,6 @@ def plot_training_history(history_path: Path, output_path: Optional[Path] = None
     if dice_key:
         dice_scores = history["val_metrics"][dice_key]
         ax.plot(epochs, dice_scores, 'g-', label=f'Val {dice_key}', linewidth=2, marker='o', markersize=3)
-        # Add best score line
         best_idx = np.argmax(dice_scores)
         best_score = dice_scores[best_idx]
         ax.axhline(y=best_score, color='g', linestyle='--', alpha=0.5, label=f'Best: {best_score:.4f} @ epoch {best_idx+1}')
@@ -232,13 +194,10 @@ def plot_training_history(history_path: Path, output_path: Optional[Path] = None
     if logger:
         logger.info(f"Training plot saved: {output_path}")
 
-# ============================================================================
-# CONFIGURATION DATACLASS
-# ============================================================================
+# Configuration Dataclass
 
 @dataclass
 class Config:
-    """Centralized configuration with type hints and defaults."""
     # Paths
     project_root: Path = field(default_factory=lambda: Path(__file__).resolve().parent)
     imagecas_root: Path = None
@@ -363,9 +322,7 @@ class Config:
             for dim in self.roi_size
         )
 
-# ============================================================================
-# UTILITY FUNCTIONS
-# ============================================================================
+
 
 def set_all_seeds(seed: int, deterministic: bool = True):
     """Set seeds for reproducibility."""
@@ -575,9 +532,7 @@ def split_dataset(
     logger.info(f"Final split: train={len(train_cases)}, val={len(val_cases)}, test={len(test_cases)}")
     return train_cases, val_cases, test_cases
 
-# ============================================================================
-# TRANSFORMS
-# ============================================================================
+# Transforms
 
 def get_transforms(config: Config, mode: str = "train"):
     """Build MONAI transforms pipeline."""
@@ -669,9 +624,7 @@ def get_transforms(config: Config, mode: str = "train"):
     
     return Compose(transforms)
 
-# ============================================================================
 # MODEL
-# ============================================================================
 
 def build_model(config: Config, logger: logging.Logger):
     """Build 3D U-Net or Attention U-Net model."""
@@ -703,7 +656,7 @@ def build_model(config: Config, logger: logging.Logger):
                     strides=config.unet_strides,
                     dropout=config.unet_dropout,
                 )
-                logger.info("✅ Using Attention U-Net")
+                logger.info(" Using Attention U-Net")
             except Exception as e:
                 logger.warning(f"Attention U-Net failed: {e}, using standard U-Net")
                 model = UNet(
@@ -742,7 +695,7 @@ def build_model(config: Config, logger: logging.Logger):
     if config.compile_model and hasattr(torch, "compile") and config.device.startswith("cuda"):
         try:
             model = torch.compile(model, mode="reduce-overhead")
-            logger.info("✅ Model compiled")
+            logger.info("Model compiled")
         except Exception as e:
             logger.warning(f"torch.compile failed: {e}")
     
@@ -752,9 +705,7 @@ def build_model(config: Config, logger: logging.Logger):
     
     return model
 
-# ============================================================================
-# LOSS & OPTIMIZATION
-# ============================================================================
+# Loss and Optimization
 
 class DiceLoss(nn.Module):
     """Dice loss with numerical stability."""
@@ -1018,9 +969,8 @@ def resolve_checkpoint_path(resume: str, checkpoint_dir: Path) -> Path:
     
     raise FileNotFoundError(f"Checkpoint not found: {resume} (tried {cwd_path} and {fallback})")
 
-# ============================================================================
-# VALIDATION & METRICS
-# ============================================================================
+
+# Validation and metrics
 
 def cleanup_connected_components(
     mask: torch.Tensor,
@@ -1088,9 +1038,7 @@ def compute_validation_metrics(
     
     return results
 
-# ============================================================================
-# TRAINING ENGINE
-# ============================================================================
+# Training
 
 class Trainer:
     """Main training engine with AMP and history tracking."""
@@ -1426,9 +1374,7 @@ class Trainer:
         
         logger.info(f"Saved {count} validation predictions to {save_dir}")
 
-# ============================================================================
-# MAIN PIPELINE
-# ============================================================================
+# Main Pipeline
 
 def main():
     """Main entry point."""
