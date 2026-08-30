@@ -41,3 +41,12 @@ manuscript/*.log
 manuscript/*.out
 manuscript/*.toc
 manuscript/*.synctex.gz
+
+# topology_correction: heavy regenerable artifacts
+outputs/topology_correction/case_outputs/
+outputs/topology_correction/mesh_qc/*/case_outputs/
+outputs/topology_correction/_transfer/
+outputs/topology_correction/toolpath/sample_gcode/
+*.stl
+*.nii.gz
+*.gcode
