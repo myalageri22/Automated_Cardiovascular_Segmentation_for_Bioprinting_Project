@@ -158,6 +158,12 @@ Large/private artifacts are intentionally excluded: ImageCAS images and labels, 
 
 This is software-level production-slicer execution under one fixed computational profile. It is not physical printing, bioprinter or bioink validation, print-fidelity validation, biological validation, or evidence of clinical readiness.
 
+## Conventional 3D U-Net Baseline
+
+The finalized same-split comparison uses exactly 250 paired ImageCAS held-out cases at a fixed threshold of 0.5 without test-set threshold tuning. The Attention U-Net achieved Dice 0.7878 versus 0.7723 and clDice 0.8695 versus 0.8590 for the conventional plain 3D U-Net. It also had higher precision and lower HD95, while recall was statistically similar.
+
+This is a same-split conventional 3D U-Net baseline comparison, not a pure architecture ablation. See [the detailed baseline documentation](docs/experiments/plain_unet_baseline/README.md) for cohort provenance, paired statistics, reproducibility scripts, and manuscript-ready text.
+
 ## Utility Scripts:
 
 - `beforevsafter.py`: posterstyle pipeline visualizations and mesh export
